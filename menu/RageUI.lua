@@ -399,7 +399,7 @@ function RageUI.Banner()
     if CurrentMenu ~= nil then
         if CurrentMenu() and (CurrentMenu.Display.Header) then
             RageUI.ItemsSafeZone(CurrentMenu)
-            if CurrentMenu.Sprite.Dictionary then
+            if CurrentMenu.Sprite then
                 RenderSprite(CurrentMenu.Sprite.Dictionary, CurrentMenu.Sprite.Texture, CurrentMenu.X, CurrentMenu.Y, RageUI.Settings.Items.Title.Background.Width + CurrentMenu.WidthOffset, RageUI.Settings.Items.Title.Background.Height, nil)
             else
                 RenderRectangle(CurrentMenu.X, CurrentMenu.Y, RageUI.Settings.Items.Title.Background.Width + CurrentMenu.WidthOffset, RageUI.Settings.Items.Title.Background.Height, CurrentMenu.Rectangle.R, CurrentMenu.Rectangle.G, CurrentMenu.Rectangle.B, CurrentMenu.Rectangle.A)
