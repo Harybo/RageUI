@@ -41,6 +41,9 @@ RageUI.CheckboxStyle = {
     Cross = 2
 }
 
+---@type table Index of all List Items
+local Index = { }
+
 ---StyleCheckBox
 ---@param Selected number
 ---@param Checked boolean
@@ -76,6 +79,11 @@ function RageUI.Item.Checkbox(Label, Description, Checked, Style, Actions)
 
     if CurrentMenu ~= nil then
         if CurrentMenu() then
+
+            local Option = RageUI.Options + 1
+            if (Index[Option] == nil) then
+                Index[Option] = { Current = Checked }
+            end
 
             ---@type number
             local Option = RageUI.Options + 1
@@ -161,25 +169,27 @@ function RageUI.Item.Checkbox(Label, Description, Checked, Style, Actions)
                     BoxOffset = RightBadgeOffset + BoxOffset
                     if Style.Style ~= nil then
                         if Style.Style == RageUI.CheckboxStyle.Tick then
-                            StyleCheckBox(Selected, Checked, 2, 4, BoxOffset)
+                            StyleCheckBox(Selected, Index[Option].Current, 2, 4, BoxOffset)
                         elseif Style.Style == RageUI.CheckboxStyle.Cross then
-                            StyleCheckBox(Selected, Checked, 5, 6, BoxOffset)
+                            StyleCheckBox(Selected, Index[Option].Current, 5, 6, BoxOffset)
                         else
-                            StyleCheckBox(Selected, Checked, 2, 4, BoxOffset)
+                            StyleCheckBox(Selected, Index[Option].Current, 2, 4, BoxOffset)
                         end
                     else
-                        StyleCheckBox(Selected, Checked, 2, 4, BoxOffset)
+                        StyleCheckBox(Selected, Index[Option].Current, 2, 4, BoxOffset)
                     end
 
                     if Selected and (CurrentMenu.Controls.Select.Active or (Hovered and CurrentMenu.Controls.Click.Active)) and (Style.Enabled == true or Style.Enabled == nil) then
                         local Audio = RageUI.Settings.Audio
                         RageUI.PlaySound(Audio[Audio.Use].Select.audioName, Audio[Audio.Use].Select.audioRef)
-                        Checked = not Checked
-                        if (Checked) then
+                        Index[Option].Current = not Index[Option].Current
+                        if (Index[Option].Current) then
+                            Index[Option].Current = true
                             Citizen.CreateThread(function()
                                 Actions.onChecked();
                             end)
                         else
+                            Index[Option].Current = false
                             Citizen.CreateThread(function()
                                 Actions.onUnChecked();
                             end)
@@ -196,11 +206,13 @@ function RageUI.Item.Checkbox(Label, Description, Checked, Style, Actions)
 
                 if (((CurrentMenu.Controls.Select.Active or (Hovered and CurrentMenu.Controls.Click.Active)) and Selected)) then
                     Citizen.CreateThread(function()
-                        Actions.onSelected(Checked);
+                        Actions.onSelected(Index[Option].Current);
                     end)
                 end
                 if (Selected) then
-                    Actions.onActive();
+                    if (Actions.onActive ~= nil) then
+                        Actions.onActive();
+                    end
                 end
 
             end
