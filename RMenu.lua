@@ -97,7 +97,7 @@ function RMenu:Delete(Type, Name, cb)
     self[Type][Name] = nil
     collectgarbage()
 
-    if Cb then
+    if cb then
         return nil
     end
 end
@@ -106,9 +106,13 @@ end
 ---@param Type string
 ---@return void
 ---@public
-function RMenu:DeleteType(Type)
+function RMenu:DeleteType(Type, cb)
     self[Type] = nil
     collectgarbage()
+
+    if cb then
+        return nil
+    end
 end
 
 ---GetMenus
