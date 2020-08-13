@@ -36,7 +36,7 @@ local TotalMenus = {}
 ---@param Menu table
 ---@return RMenu
 ---@public
-function RMenu.Add(Type, Name, Menu)
+function RMenu.Add(Type, Name, Menu, cb)
     if RMenu[Type] == nil then
         RMenu[Type] = {}
     end
@@ -46,6 +46,10 @@ function RMenu.Add(Type, Name, Menu)
     }
 
     table.insert(TotalMenus, Menu)
+
+    if cb then
+        return RMenu[Type][Name].Menu
+    end
 end
 
 ---Get
@@ -89,9 +93,13 @@ end
 ---@param Name string
 ---@return void
 ---@public
-function RMenu:Delete(Type, Name)
+function RMenu:Delete(Type, Name, cb)
     self[Type][Name] = nil
     collectgarbage()
+
+    if Cb then
+        return nil
+    end
 end
 
 ---DeleteType
