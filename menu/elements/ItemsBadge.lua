@@ -127,6 +127,12 @@ RageUI.BadgeStyle = {
             BadgeTexture = Selected and "shop_makeup_icon_b" or "shop_makeup_icon_a",
         }
     end,
+    Valise = function(Selected)
+        return {
+            BadgeTexture = "capture_the_flag",
+            BadgeDictionary = "commonmenutu"
+        }
+    end,
     Mask = function(Selected)
         return {
             BadgeTexture = Selected and "shop_mask_icon_b" or "shop_mask_icon_a",

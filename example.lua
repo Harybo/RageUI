@@ -48,7 +48,7 @@ Citizen.CreateThread(function()
         RageUI.IsVisible(RMenu:Get('showcase', 'main'), function()
 
             for i = 1, 20 do
-                RageUI.Item.Button('Basic Items', nil, {  }, true, {
+                RageUI.Item.Button('Basic Items', nil, { RightBadge = RageUI.BadgeStyle.Lock, Color = { HightLightColor = { 255, 255, 255, 200 }, BackgroundColor = { 255, 0, 0, 100 } } }, true, {
                     onHovered = function()
 
                     end,
