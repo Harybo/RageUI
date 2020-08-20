@@ -26,7 +26,7 @@ function RageUI.CreateMenu(Title, Subtitle, X, Y, TextureDictionary, TextureName
     Menu.InstructionalButtons = {}
 
     Menu.Display.Header = true;
-    Menu.Display.Glare = Glare or true;
+    Menu.Display.Glare = Glare == nil or Glare;
     Menu.Display.Subtitle = true;
     Menu.Display.Background = true;
     Menu.Display.Navigation = true;
