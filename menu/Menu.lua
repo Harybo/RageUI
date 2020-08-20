@@ -33,7 +33,7 @@ function RageUI.CreateMenu(Title, Subtitle, X, Y, TextureDictionary, TextureName
     Menu.Display.InstructionalButton = true;
 
     Menu.Title = Title or ""
-    Menu.Subtitle = string.upper(Subtitle) or nil
+    Menu.Subtitle = Subtitle or nil
     Menu.SubtitleHeight = -37
     Menu.Description = nil
     Menu.DescriptionHeight = RageUI.Settings.Items.Description.Background.Height
