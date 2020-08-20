@@ -17,7 +17,7 @@
 ---@param A number
 ---@return RageUIMenus
 ---@public
-function RageUI.CreateMenu(Title, Subtitle, X, Y, TextureDictionary, TextureName, R, G, B, A)
+function RageUI.CreateMenu(Title, Subtitle, X, Y, TextureDictionary, TextureName, Glare, R, G, B, A)
 
     ---@type table
     local Menu = {}
@@ -26,7 +26,7 @@ function RageUI.CreateMenu(Title, Subtitle, X, Y, TextureDictionary, TextureName
     Menu.InstructionalButtons = {}
 
     Menu.Display.Header = true;
-    Menu.Display.Glare = true;
+    Menu.Display.Glare = Glare or true;
     Menu.Display.Subtitle = true;
     Menu.Display.Background = true;
     Menu.Display.Navigation = true;
