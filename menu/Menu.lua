@@ -44,8 +44,8 @@ function RageUI.CreateMenu(Title, Subtitle, X, Y, TextureDictionary, TextureName
     Menu.Open = false
     Menu.Controls = RageUI.Settings.Controls
     Menu.Index = 1
-    Menu.Sprite = { Dictionary = TextureDictionary or "commonmenu", Texture = TextureName or "interaction_bgd", Color = { R = R, G = G, B = B, A = A } }
-    Menu.Rectangle = nil
+    Menu.Sprite = (R == nil and { Dictionary = TextureDictionary or "commonmenu", Texture = TextureName or "interaction_bgd" }) or nil
+    Menu.Rectangle = (TextureDictionary == nil and { R = tonumber(R) or 255, G = tonumber(G) or 255, B = tonumber(B) or 255, A = tonumber(A) or 255 }) or nil
     Menu.Pagination = { Minimum = 1, Maximum = 10, Total = 10 }
     Menu.Safezone = true
     Menu.SafeZoneSize = nil
