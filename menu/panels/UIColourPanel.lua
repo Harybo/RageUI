@@ -27,15 +27,18 @@ local Colour = {
 local ColourIndex = { }
 
 ---@type Panel
-function RageUI.Panel.ColourPanel(Title, Colours, StartedAtIndex, Action, DisplayAtIndex)
+function RageUI.Panel.ColourPanel(Title, Colours, StartedAtIndex, Action, DisplayAtIndex, NumberPanel)
     local CurrentMenu = RageUI.CurrentMenu;
     if CurrentMenu ~= nil then
         if CurrentMenu() and (DisplayAtIndex == nil or (CurrentMenu.Index == DisplayAtIndex)) then
             if (ColourIndex[DisplayAtIndex] == nil) then
-                ColourIndex[DisplayAtIndex] = { CurrentIndex = StartedAtIndex, MinimumIndex = StartedAtIndex - 4 };
+                ColourIndex[DisplayAtIndex] = {};
             end
-            local CurrentIndex = ColourIndex[DisplayAtIndex].CurrentIndex
-            local MinimumIndex = ColourIndex[DisplayAtIndex].MinimumIndex
+            if (ColourIndex[DisplayAtIndex][(NumberPanel and NumberPanel or 1)] == nil) then
+                ColourIndex[DisplayAtIndex][(NumberPanel and NumberPanel or 1)] = { CurrentIndex = StartedAtIndex, MinimumIndex = StartedAtIndex - 4 };
+            end
+            local CurrentIndex = ColourIndex[DisplayAtIndex][(NumberPanel and NumberPanel or 1)].CurrentIndex
+            local MinimumIndex = ColourIndex[DisplayAtIndex][(NumberPanel and NumberPanel or 1)].MinimumIndex
 
             ---@type number
             local Maximum = (#Colours > 9) and 9 or #Colours
@@ -64,31 +67,31 @@ function RageUI.Panel.ColourPanel(Title, Colours, StartedAtIndex, Action, Displa
                 if RageUI.Settings.Controls.Click.Active then
                     Selected = true
                     if LeftArrowHovered then
-                        ColourIndex[DisplayAtIndex].CurrentIndex = CurrentIndex - 1
+                        ColourIndex[DisplayAtIndex][(NumberPanel and NumberPanel or 1)].CurrentIndex = CurrentIndex - 1
                         if CurrentIndex <= 1 then
-                            ColourIndex[DisplayAtIndex].CurrentIndex = #Colours
-                            ColourIndex[DisplayAtIndex].MinimumIndex = #Colours - Maximum + 1
+                            ColourIndex[DisplayAtIndex][(NumberPanel and NumberPanel or 1)].CurrentIndex = #Colours
+                            ColourIndex[DisplayAtIndex][(NumberPanel and NumberPanel or 1)].MinimumIndex = #Colours - Maximum + 1
                         elseif CurrentIndex <= MinimumIndex then
-                            ColourIndex[DisplayAtIndex].MinimumIndex = MinimumIndex - 1
+                            ColourIndex[DisplayAtIndex][(NumberPanel and NumberPanel or 1)].MinimumIndex = MinimumIndex - 1
                         end
                     elseif RightArrowHovered then
-                        ColourIndex[DisplayAtIndex].CurrentIndex = CurrentIndex + 1
+                        ColourIndex[DisplayAtIndex][(NumberPanel and NumberPanel or 1)].CurrentIndex = CurrentIndex + 1
                         if CurrentIndex >= #Colours then
-                            ColourIndex[DisplayAtIndex].CurrentIndex = 1
-                            ColourIndex[DisplayAtIndex].MinimumIndex = 1
+                            ColourIndex[DisplayAtIndex][(NumberPanel and NumberPanel or 1)].CurrentIndex = 1
+                            ColourIndex[DisplayAtIndex][(NumberPanel and NumberPanel or 1)].MinimumIndex = 1
                         elseif CurrentIndex >= MinimumIndex + Maximum - 1 then
-                            ColourIndex[DisplayAtIndex].MinimumIndex = MinimumIndex + 1
+                            ColourIndex[DisplayAtIndex][(NumberPanel and NumberPanel or 1)].MinimumIndex = MinimumIndex + 1
                         end
                     elseif Hovered then
                         for Index = 1, Maximum do
                             if RageUI.IsMouseInBounds(CurrentMenu.X + Colour.Box.X + (Colour.Box.Width * (Index - 1)) + CurrentMenu.SafeZoneSize.X + (CurrentMenu.WidthOffset / 2), CurrentMenu.Y + Colour.Box.Y + CurrentMenu.SafeZoneSize.Y + CurrentMenu.SubtitleHeight + RageUI.ItemOffset, Colour.Box.Width, Colour.Box.Height) then
-                                ColourIndex[DisplayAtIndex].CurrentIndex = MinimumIndex + Index - 1
+                                ColourIndex[DisplayAtIndex][(NumberPanel and NumberPanel or 1)].CurrentIndex = MinimumIndex + Index - 1
                             end
                         end
                     end
                     if (Action.onColourChange ~= nil) then
                         Citizen.CreateThread(function()
-                            Action.onColourChange(ColourIndex[DisplayAtIndex].CurrentIndex)
+                            Action.onColourChange(ColourIndex[DisplayAtIndex][(NumberPanel and NumberPanel or 1)].CurrentIndex)
                         end)
                     end
                 end
