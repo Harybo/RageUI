@@ -88,6 +88,12 @@ RageUI.BadgeStyle = {
             BadgeDictionary = "mpinventory"
         }
     end,
+    Ped = function(Selected)
+        return {
+            BadgeTexture = Selected and "mp_specitem_ped_black" or "mp_specitem_ped",
+            BadgeDictionary = "mpinventory"
+        }
+    end,
     Heli = function(Selected)
         return {
             BadgeTexture = Selected and "mp_specitem_heli_black" or "mp_specitem_heli",
