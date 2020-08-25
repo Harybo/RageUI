@@ -104,7 +104,7 @@ end
 function RageUI.CreateSubMenu(ParentMenu, Title, Subtitle, X, Y, TextureDictionary, TextureName, R, G, B, A)
     if ParentMenu ~= nil then
         if ParentMenu() then
-            local Menu = RageUI.CreateMenu(Title or ParentMenu.Title, string.upper(Subtitle) or string.upper(ParentMenu.Subtitle), X or ParentMenu.X, Y or ParentMenu.Y)
+            local Menu = RageUI.CreateMenu(Title or ParentMenu.Title, Subtitle or ParentMenu.Subtitle, X or ParentMenu.X, Y or ParentMenu.Y)
             Menu.Parent = ParentMenu
             Menu.WidthOffset = ParentMenu.WidthOffset
             Menu.Safezone = ParentMenu.Safezone
