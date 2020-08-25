@@ -99,24 +99,24 @@ function RageUI.Item.UISliderHeritage(Label, StartedAtIndex, Description, Action
                 RageUI.ItemsDescription(CurrentMenu, Description, Selected);
 
                 if Selected and (CurrentMenu.Controls.SliderLeft.Active or (CurrentMenu.Controls.Click.Active and LeftArrowHovered)) and not (CurrentMenu.Controls.SliderRight.Active or (CurrentMenu.Controls.Click.Active and RightArrowHovered)) then
-                    startFrom = startFrom - value
-                    if startFrom < 0.1 then
-                        startFrom = 0.0
-                        if (Actions.onListChange ~= nil) then
+                    ItemIndex = ItemIndex - value
+                    if ItemIndex < 0.1 then
+                        ItemIndex = 0.0
+                        if (Actions.onSliderChange ~= nil) then
                             Citizen.CreateThread(function()
-                                Actions.onListChange(startFrom / 10, startFrom);
+                                Actions.onSliderChange(ItemIndex / 10, ItemIndex);
                             end)
                         end
                     else
                         RageUI.PlaySound(Audio[Audio.Use].Slider.audioName, Audio[Audio.Use].Slider.audioRef, true)
                     end
                 elseif Selected and (CurrentMenu.Controls.SliderRight.Active or (CurrentMenu.Controls.Click.Active and RightArrowHovered)) and not (CurrentMenu.Controls.SliderLeft.Active or (CurrentMenu.Controls.Click.Active and LeftArrowHovered)) then
-                    startFrom = startFrom + value
-                    if startFrom > #Items then
-                        startFrom = 10
-                        if (Actions.onListChange ~= nil) then
+                    ItemIndex = ItemIndex + value
+                    if ItemIndex > #Items then
+                        ItemIndex = 10
+                        if (Actions.onSliderChange ~= nil) then
                             Citizen.CreateThread(function()
-                                Actions.onListChange(startFrom / 10, startFrom);
+                                Actions.onSliderChange(ItemIndex / 10, ItemIndex);
                             end)
                         end
                     else
