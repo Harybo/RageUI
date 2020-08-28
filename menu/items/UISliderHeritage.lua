@@ -34,6 +34,8 @@ for i = 1, 10 do
 end
 local startFrom = nil
 
+local values = {}
+
 ---@type Item
 function RageUI.Item.UISliderHeritage(Label, StartedAtIndex, Description, Actions, Value)
 
@@ -47,6 +49,8 @@ function RageUI.Item.UISliderHeritage(Label, StartedAtIndex, Description, Action
             ---@type number
             local Option = RageUI.Options + 1
 
+            local startFrom = 0
+
             if CurrentMenu.Pagination.Minimum <= Option and CurrentMenu.Pagination.Maximum >= Option then
 
                 ---@type number
@@ -54,6 +58,12 @@ function RageUI.Item.UISliderHeritage(Label, StartedAtIndex, Description, Action
                 local Selected = CurrentMenu.Index == Option
                 if (startFrom == nil) then
                     startFrom = StartedAtIndex
+                end
+
+                if (values[Option] == nil) then
+                    startFrom = StartedAtIndex
+                else 
+                    startFrom = values[Option]
                 end
 
                 ---@type boolean
@@ -99,24 +109,24 @@ function RageUI.Item.UISliderHeritage(Label, StartedAtIndex, Description, Action
                 RageUI.ItemsDescription(CurrentMenu, Description, Selected);
 
                 if Selected and (CurrentMenu.Controls.SliderLeft.Active or (CurrentMenu.Controls.Click.Active and LeftArrowHovered)) and not (CurrentMenu.Controls.SliderRight.Active or (CurrentMenu.Controls.Click.Active and RightArrowHovered)) then
-                    ItemIndex = ItemIndex - value
-                    if ItemIndex < 0.1 then
-                        ItemIndex = 0.0
-                        if (Actions.onSliderChange ~= nil) then
+                    startFrom = startFrom - value
+                    if startFrom < 0.1 then
+                        startFrom = 0.0
+                        if (Actions.onListChange ~= nil) then
                             Citizen.CreateThread(function()
-                                Actions.onSliderChange(ItemIndex / 10, ItemIndex);
+                                Actions.onListChange(startFrom / 10, startFrom);
                             end)
                         end
                     else
                         RageUI.PlaySound(Audio[Audio.Use].Slider.audioName, Audio[Audio.Use].Slider.audioRef, true)
                     end
                 elseif Selected and (CurrentMenu.Controls.SliderRight.Active or (CurrentMenu.Controls.Click.Active and RightArrowHovered)) and not (CurrentMenu.Controls.SliderLeft.Active or (CurrentMenu.Controls.Click.Active and LeftArrowHovered)) then
-                    ItemIndex = ItemIndex + value
-                    if ItemIndex > #Items then
-                        ItemIndex = 10
-                        if (Actions.onSliderChange ~= nil) then
+                    startFrom = startFrom + value
+                    if startFrom > #Items then
+                        startFrom = 10
+                        if (Actions.onListChange ~= nil) then
                             Citizen.CreateThread(function()
-                                Actions.onSliderChange(ItemIndex / 10, ItemIndex);
+                                Actions.onListChange(startFrom / 10, startFrom);
                             end)
                         end
                     else
@@ -138,8 +148,10 @@ function RageUI.Item.UISliderHeritage(Label, StartedAtIndex, Description, Action
                         Actions.onHovered();
                     end
                 end
-            end
 
+                values[Option] = startFrom
+            end
+            
             RageUI.Options = RageUI.Options + 1
         end
     end
