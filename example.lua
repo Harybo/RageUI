@@ -6,22 +6,25 @@
 
 print("^1 RageUI - testing file is started. ^0")
 
-RMenu.Add('showcase', 'main', RageUI.CreateMenu("RageUI", "Undefined for using SetSubtitle"))
-RMenu:Get('showcase', 'main'):SetSubtitle("RageUI Showcase")
-RMenu:Get('showcase', 'main'):DisplayGlare(false);
-RMenu:Get('showcase', 'main').Closed = function()
-    print('Closed Showcase Menu')
-end;
-RMenu:Get('showcase', 'main').EnableMouse = true
+local mainMenu = RageUI.CreateMenu("YOUR TITLE", "YOU SUB TITLE")
+local subMenu =  RageUI.CreateSubMenu(mainMenu, "A TITLE", "A SUB TITLE")
 
-RMenu:Get('showcase', 'main').onIndexChange = function(Index)
+mainMenu:DisplayGlare(false)
+mainMenu.Closed = function()
+    print('Closed Showcase Menu')
+end
+mainMenu.EnableMouse = true
+mainMenu.onIndexChange = function(Index)
     print(Index)
 end
 
-Keys.Register('E', 'E', 'Open RageUI Showcase menu default.', function()
-    RageUI.Visible(RMenu:Get('showcase', 'main'), not RageUI.Visible(RMenu:Get('showcase', 'main')))
-end)
+--> This will show the glare on the submenu : 
+subMenu:DisplayGlare(true)
 
+--> This will show the page counter on the submenu :
+subMenu:DisplayPageCounter(true)
+
+local ParentData = {mom = 0, dad = 0}
 local index = {
     checkbox = false,
     list = 2,
@@ -46,7 +49,7 @@ Citizen.CreateThread(function()
     while (true) do
         Citizen.Wait(1.0)
 
-        RageUI.IsVisible(RMenu:Get('showcase', 'main'), function()
+        RageUI.IsVisible(mainMenu, function()
 
             RageUI.Button('Basic Items', description, {}, true, {
                 onHovered = function()
@@ -60,11 +63,11 @@ Citizen.CreateThread(function()
             RageUI.Checkbox('Checkbox', description, index.checkbox, {}, {
                 onChecked = function()
                     Visual.Subtitle("onChecked", 100)
-                    RMenu:Get('showcase', 'main').TitleFont = 7
+                    mainMenu.TitleFont = 7
                 end,
                 onUnChecked = function()
                     Visual.Subtitle("onUnChecked", 100)
-                    RMenu:Get('showcase', 'main').TitleFont = 1
+                    mainMenu.TitleFont = 1
                 end,
                 onSelected = function(Index)
                     index.checkbox = Index
@@ -90,7 +93,7 @@ Citizen.CreateThread(function()
             RageUI.UISliderHeritage('Heritage Item', index.heritage, description, {
                 onSliderChange = function(Float, Index)
                     index.heritage = Index;
-                    RMenu:Get('showcase', 'main').TitleScale = Float
+                    mainMenu.TitleScale = Float
                 end,
                 onSelected = function(Float, Index)
                     Visual.Subtitle("onSelected", 100)
@@ -122,33 +125,38 @@ Citizen.CreateThread(function()
                 end
             })
 
+            RageUI.Button('SubMenu', "Description here", {}, true, {onSelected = function() print("HELLO WORLD !") end}, subMenu);
+
+            RageUI.Button('Simple Bouton with background colour', "Description here", { RightLabel = "", Color = { HightLightColor = { 0, 155, 0, 150 }, BackgroundColor = { 38, 85, 150, 160 } }}, true, {onSelected = function() print("HELLO WORLD !") end});
+
         end, function()
 
             RageUI.Grid(index.grid.default.x, index.grid.default.y, 'Top Text', 'Bottom Text', 'Left Text', 'Right Text', {
-                onSelected = function(X, Y)
+                onSelected = function(IndexX, IndexY, X, Y)
 
                 end,
-                onPositionChange = function(X, Y)
-                    index.grid.default.x = X
-                    index.grid.default.y = Y
+                onPositionChange = function(IndexX, IndexY, X, Y)
+                    Visual.Subtitle(string.format('x = %s, y = %s', X, Y), 1000)
+                    index.grid.default.x = IndexX
+                    index.grid.default.y = IndexY
                 end
             }, 1)
 
             RageUI.GridHorizontal(index.grid.horizontal.x, 'Left Text', 'Right Text', {
-                onSelected = function(X, Y)
+                onSelected = function(IndexX, IndexY, X, Y)
 
                 end,
-                onPositionChange = function(X, Y)
-                    index.grid.horizontal.x = X
+                onPositionChange = function(IndexX, IndexY, X, Y)
+                    index.grid.horizontal.x = IndexX
                 end
             }, 2)
 
             RageUI.GridVertical(index.grid.vertical.y, 'Top Text', 'Bottom Text', {
-                onSelected = function(X, Y)
+                onSelected = function(IndexX, IndexY, X, Y)
 
                 end,
-                onPositionChange = function(X, Y)
-                    index.grid.vertical.y = Y
+                onPositionChange = function(IndexX, IndexY, X, Y)
+                    index.grid.vertical.y = IndexY
                 end
             }, 3)
 
@@ -166,7 +174,9 @@ Citizen.CreateThread(function()
                     index.color.primary[1] = MinimumIndex
                     index.color.primary[2] = CurrentIndex
                 end
-            }, 6)
+            }, 6, {
+                Seperator = { Text = "/" }
+            })
 
             RageUI.ColourPanel("Couleur de paco secondaire", RageUI.PanelColour.HairCut, index.color.secondary[1], index.color.secondary[2], {
                 onColorChange = function(MinimumIndex, CurrentIndex)
@@ -176,6 +186,17 @@ Citizen.CreateThread(function()
             }, 6)
         end)
 
+        --> SubMenu : 
+        RageUI.IsVisible(subMenu, function()
+            --> EXEMPLE ON HOW TO USE HERITAGE WINDOW : 
+            RageUI.Window.Heritage(ParentData['mom'], ParentData['dad'])
 
+            --> your logic here ... 
+        end, function() end)
     end
+end)
+
+
+Keys.Register('E', 'E', 'Open RageUI Showcase menu default.', function()
+    RageUI.Visible(mainMenu, not RageUI.Visible(mainMenu))
 end)
